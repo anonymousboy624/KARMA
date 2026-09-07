@@ -1,0 +1,41 @@
+{
+  "sequence_length": 14,
+  "prediction_horizon": 7,
+  "n_features": 100,
+  "train_samples": 497,
+  "val_samples": 71,
+  "test_samples": 142,
+  "data_shape": {
+    "X_train": [
+      497,
+      14,
+      100
+    ],
+    "y_train": [
+      497,
+      7,
+      100
+    ],
+    "X_val": [
+      71,
+      14,
+      100
+    ],
+    "y_val": [
+      71,
+      7,
+      100
+    ],
+    "X_test": [
+      142,
+      14,
+      100
+    ],
+    "y_test": [
+      142,
+      7,
+      100
+    ]
+  },
+  "format": "(N, seq_length, D)"
+}

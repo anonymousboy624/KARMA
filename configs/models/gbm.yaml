@@ -1,0 +1,8 @@
+type: gbm
+# n_estimators kept modest — GradientBoostingRegressor fits trees strictly
+# sequentially (no per-tree parallelism), and MultiOutputRegressor fits one
+# of these per output variable, so wall-clock scales with n_estimators * D.
+n_estimators: 50
+max_depth: 3
+learning_rate: 0.1
+subsample: 1.0

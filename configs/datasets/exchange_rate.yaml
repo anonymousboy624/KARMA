@@ -1,0 +1,23 @@
+name: exchange_rate
+D: 8
+W: 14
+forecast_steps: 7
+data_dir: /workspaces/karma_/data/generated/exchange_rate
+var_names:
+  - AUD
+  - GBP
+  - CAD
+  - CHF
+  - CNY
+  - JPY
+  - NZD
+  - SGD
+dataset_module: dataset.exchange_rate_dataset
+checkpoints:
+  lstm: ./outputs/checkpoints/exchange_rate_lstm
+  tcn: ./outputs/checkpoints/exchange_rate_tcn
+  transformer: ./outputs/checkpoints/exchange_rate_transformer
+  gbm: ./outputs/checkpoints/exchange_rate_gbm
+  rf: ./outputs/checkpoints/exchange_rate_rf
+  xgboost: ./outputs/checkpoints/exchange_rate_xgboost
+results_dir: results/exchange_rate

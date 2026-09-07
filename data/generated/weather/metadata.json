@@ -1,0 +1,43 @@
+{
+  "dataset": "weather",
+  "display": "Weather (21 meteorological indicators)",
+  "sequence_length": 24,
+  "prediction_horizon": 1,
+  "n_features": 21,
+  "train_samples": 34976,
+  "val_samples": 4976,
+  "test_samples": 9976,
+  "data_shape": {
+    "X_train": [
+      34976,
+      24,
+      21
+    ],
+    "y_train": [
+      34976,
+      1,
+      21
+    ],
+    "X_val": [
+      4976,
+      24,
+      21
+    ],
+    "y_val": [
+      4976,
+      1,
+      21
+    ],
+    "X_test": [
+      9976,
+      24,
+      21
+    ],
+    "y_test": [
+      9976,
+      1,
+      21
+    ]
+  },
+  "format": "(N, seq_length, D)"
+}

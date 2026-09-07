@@ -1,0 +1,14 @@
+__pycache__/
+results/
+*.pyc
+data/raw/*
+node_modules/
+
+# Top-level Lightning/MLflow checkpoint dump — unrelated to outputs/checkpoints/
+# below, which is tracked (best.pt, *.joblib, evaluation_results.json, etc.)
+/checkpoints/
+
+# outputs/checkpoints — ignore intermediate epoch checkpoints; keep best.pt,
+# *.joblib (fitted gbm/rf/xgboost regressors — no .pt state_dict), and
+# evaluation_results.json/model_config.json sidecars
+outputs/checkpoints/**/checkpoint_*.pt

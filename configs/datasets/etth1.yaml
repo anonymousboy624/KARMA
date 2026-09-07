@@ -1,0 +1,22 @@
+name: etth1
+D: 7
+W: 24
+forecast_steps: 7
+data_dir: /workspaces/karma_/data/generated/etth1
+var_names:
+  - HUFL
+  - HULL
+  - MUFL
+  - MULL
+  - LUFL
+  - LULL
+  - OT
+dataset_module: dataset.etth1_dataset
+checkpoints:
+  lstm: ./outputs/checkpoints/etth1_lstm
+  tcn: ./outputs/checkpoints/etth1_tcn
+  transformer: ./outputs/checkpoints/etth1_transformer
+  gbm: ./outputs/checkpoints/etth1_gbm
+  rf: ./outputs/checkpoints/etth1_rf
+  xgboost: ./outputs/checkpoints/etth1_xgboost
+results_dir: results/etth1

@@ -1,0 +1,35 @@
+name: electricity
+D: 20
+W: 24
+forecast_steps: 1
+data_dir: /workspaces/karma_/data/generated/electricity
+var_names:
+  - MT_001
+  - MT_002
+  - MT_003
+  - MT_004
+  - MT_005
+  - MT_006
+  - MT_007
+  - MT_008
+  - MT_009
+  - MT_010
+  - MT_011
+  - MT_012
+  - MT_013
+  - MT_014
+  - MT_015
+  - MT_016
+  - MT_017
+  - MT_018
+  - MT_019
+  - MT_020
+dataset_module: dataset.electricity_dataset
+checkpoints:
+  lstm: ./outputs/checkpoints/electricity_lstm
+  tcn: ./outputs/checkpoints/electricity_tcn
+  transformer: ./outputs/checkpoints/electricity_transformer
+  gbm: ./outputs/checkpoints/electricity_gbm
+  rf: ./outputs/checkpoints/electricity_rf
+  xgboost: ./outputs/checkpoints/electricity_xgboost
+results_dir: results/electricity

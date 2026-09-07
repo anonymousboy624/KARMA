@@ -1,0 +1,9 @@
+type: xgboost
+# Fit with tree_method="hist" + multi_strategy="multi_output_tree" (set in
+# training code, not tunable here) so one booster handles all D outputs
+# jointly — no MultiOutputRegressor wrapper, unlike gbm.
+n_estimators: 200
+max_depth: 4
+learning_rate: 0.1
+subsample: 0.8
+colsample_bytree: 0.8

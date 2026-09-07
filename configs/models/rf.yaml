@@ -1,0 +1,10 @@
+type: rf
+# RandomForestRegressor supports multi-output targets natively (all D outputs
+# share one forest, split jointly), so — unlike gbm/xgboost — this is fit
+# directly with no MultiOutputRegressor wrapper.
+# max_depth capped (unbounded depth on a joint multi-output split criterion
+# produced 200 huge trees — a 1.4GB checkpoint on etth1) and min_samples_leaf
+# raised to keep both fit time and checkpoint size in check.
+n_estimators: 200
+max_depth: 12
+min_samples_leaf: 5

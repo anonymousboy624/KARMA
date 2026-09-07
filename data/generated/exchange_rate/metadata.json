@@ -1,0 +1,43 @@
+{
+  "dataset": "exchange_rate",
+  "display": "Exchange Rate (8 currencies)",
+  "sequence_length": 14,
+  "prediction_horizon": 7,
+  "n_features": 8,
+  "train_samples": 5291,
+  "val_samples": 739,
+  "test_samples": 1498,
+  "data_shape": {
+    "X_train": [
+      5291,
+      14,
+      8
+    ],
+    "y_train": [
+      5291,
+      7,
+      8
+    ],
+    "X_val": [
+      739,
+      14,
+      8
+    ],
+    "y_val": [
+      739,
+      7,
+      8
+    ],
+    "X_test": [
+      1498,
+      14,
+      8
+    ],
+    "y_test": [
+      1498,
+      7,
+      8
+    ]
+  },
+  "format": "(N, seq_length, D)"
+}

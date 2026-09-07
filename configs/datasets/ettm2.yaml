@@ -1,0 +1,22 @@
+name: ettm2
+D: 7
+W: 48
+forecast_steps: 12
+data_dir: /workspaces/karma_/data/generated/ettm2
+var_names:
+  - HUFL
+  - HULL
+  - MUFL
+  - MULL
+  - LUFL
+  - LULL
+  - OT
+dataset_module: dataset.ettm2_dataset
+checkpoints:
+  lstm: ./outputs/checkpoints/ettm2_lstm
+  tcn: ./outputs/checkpoints/ettm2_tcn
+  transformer: ./outputs/checkpoints/ettm2_transformer
+  gbm: ./outputs/checkpoints/ettm2_gbm
+  rf: ./outputs/checkpoints/ettm2_rf
+  xgboost: ./outputs/checkpoints/ettm2_xgboost
+results_dir: results/ettm2
