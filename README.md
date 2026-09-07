@@ -40,7 +40,9 @@ The KARMA pipeline runs all three pillars (discretisation â†’ K*/b* selection â†
 **TCN Experiment in Paper for all Metrics**
 
 ```bash
-python -m experiments.comparison_realdata_cv --skip_gru --skip_lstm --skip_transformer --skip_rf
+python -m experiments.comparison_realdata_cv --skip_gru --skip_lstm --skip_transformer --skip_rf --datasets etth1 exchange_rate beijing_pm25 etth2 ettm1 ettm2 electricity
+
+python -m experiments.comparison_realdata_cv --skip_gru --skip_lstm --skip_transformer --skip_rf --datasets web_traffic --tau '0,1,2'
 ```
 
 **All datasets in the paper and Supplementary Material**
