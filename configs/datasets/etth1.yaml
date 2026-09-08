@@ -2,7 +2,7 @@ name: etth1
 D: 7
 W: 24
 forecast_steps: 7
-data_dir: /workspaces/karma_/data/generated/etth1
+data_dir: /workspaces/KARMA/data/generated/etth1
 var_names:
   - HUFL
   - HULL
