@@ -2,7 +2,7 @@ name: web_traffic
 D: null # inferred from data at runtime
 W: null # inferred from data at runtime
 forecast_steps: 7
-data_dir: /workspaces/karma_/data/generated/web_traffic
+data_dir: /workspaces/KARMA/data/generated/web_traffic
 var_names: null # auto-generated: X^0 ... X^(D-1)
 dataset_module: dataset.web_traffic_dataset
 checkpoints:
