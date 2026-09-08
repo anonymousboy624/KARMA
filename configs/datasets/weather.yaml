@@ -2,7 +2,7 @@ name: weather
 D: 21
 W: 24
 forecast_steps: 1
-data_dir: /workspaces/karma_/data/generated/weather
+data_dir: /workspaces/KARMA/data/generated/weather
 var_names:
   - p (mbar)
   - T (degC)
