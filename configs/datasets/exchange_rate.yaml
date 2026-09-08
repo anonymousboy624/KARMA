@@ -2,7 +2,7 @@ name: exchange_rate
 D: 8
 W: 14
 forecast_steps: 7
-data_dir: /workspaces/karma_/data/generated/exchange_rate
+data_dir: /workspaces/KARMA/data/generated/exchange_rate
 var_names:
   - AUD
   - GBP
