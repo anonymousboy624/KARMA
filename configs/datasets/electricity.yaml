@@ -2,7 +2,7 @@ name: electricity
 D: 20
 W: 24
 forecast_steps: 1
-data_dir: /workspaces/karma_/data/generated/electricity
+data_dir: /workspaces/KARMA/data/generated/electricity
 var_names:
   - MT_001
   - MT_002
