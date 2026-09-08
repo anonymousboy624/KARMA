@@ -2,7 +2,7 @@ name: beijing
 D: null # inferred from data at runtime
 W: 24
 forecast_steps: 1
-data_dir: /workspaces/karma_/data/generated/beijing_pm25
+data_dir: /workspaces/KARMA/data/generated/beijing_pm25
 var_names:
   - pm2.5
   - DEWP
