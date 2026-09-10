@@ -163,10 +163,3 @@ data/generated/              # Pre-processed .npy splits
 ```
 
 ---
-
-## Quick reference: paper → script mapping
-
-| Paper element                                        | Script / command                                                                                   |
-| ---------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| Table 1 & 2 — VAR Experiment                         | See above                                                      |     |
-| Tables 3 & 4 — Lag-AUC removal curves and complexity | `python -m experiments.comparison_realdata_cv --skip_gru --skip_lstm --skip_transformer --skip_rf` |
