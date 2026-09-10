@@ -153,7 +153,7 @@ DATASETS: dict[str, DatasetConfig] = {
         D=100,
         T=14,
         pred_horizon=7,
-        N=3,
+        N=2,
         hidden_size=128,
         num_layers=2,
         M=200,
@@ -215,6 +215,7 @@ N_AUC_STEPS = 10  # progressive removal steps
 N_TEST_MAX = 200  # max test samples for attribution (capped for speed)
 N_TEST_LARGE_D = 50  # further reduced cap when D > 20
 NON_DIFFERENTIABLE_ARCHS = {"rf"}  # sklearn/xgboost tree ensembles
+
 
 class TorchModel(nn.Module, abc.ABC):
     """
@@ -387,7 +388,6 @@ class LSTMForecastModel(TorchModel):
         h = self.dropout_layer(self.layer_norm(lstm_out[:, -1, :]))
         raw = self.head(h)  # (B, forecast_steps * D)
         return raw.view(x.shape[0], self.forecast_steps, self.D)
-
 
 
 class _Chomp1d(nn.Module):
@@ -580,7 +580,7 @@ class TransformerForecastModel(TorchModel):
 
 
 class TreeForecastModel(TorchModel):
- 
+
     def __init__(self, D: int, T: int, forecast_steps: int = 1, device="cpu"):
         super().__init__(feature_size=D, num_states=D, hidden_size=0, device=device)
         self.D = D
@@ -623,7 +623,6 @@ class TreeForecastModel(TorchModel):
             x.shape[0], self.forecast_steps, self.D
         )
         return torch.from_numpy(pred.astype(np.float32)).to(x.device)
-
 
 
 def load_dataset(cfg: DatasetConfig):
@@ -908,7 +907,6 @@ def load_pretrained_rf(cfg: DatasetConfig, device, model_ckpt_dir: Path):
     return _load_pretrained_tree("Random Forest", "rf", cfg, device, model_ckpt_dir)
 
 
-
 def _orig_preds(x_test: np.ndarray, model: GRUForecastModel, device) -> np.ndarray:
     """Predict on x_test → (B, D) for single-step models.
 
@@ -930,7 +928,6 @@ def _orig_preds(x_test: np.ndarray, model: GRUForecastModel, device) -> np.ndarr
         ):
             return model.predict_multistep(x).cpu().numpy()  # (B, H, D)
         return model(x, return_all=False).cpu().numpy()  # (B, D)
-
 
 
 def select_var_order(x_train: np.ndarray, max_K: int = 8) -> int:
@@ -1188,8 +1185,6 @@ def _multistep_target(model, x: torch.Tensor, tau: list = None) -> torch.Tensor:
     return model(x, return_all=False)
 
 
-
-
 def run_ig(
     x_test: np.ndarray, model: GRUForecastModel, device, tau: list = None
 ) -> np.ndarray:
@@ -1258,8 +1253,6 @@ def run_timeshap(
         # sv: (T*D,) ordered (t0_d0, t0_d1, …, t1_d0, …) → reshape (T, D) → (D, T)
         attr[b] = np.abs(sv.reshape(T, D_feat).T)
     return attr
-
-
 
 
 def _timing_segment_ig(
@@ -1723,6 +1716,22 @@ def _run_methods_for_model(
         msg = f"    lag_AUC={lag_auc:.4f}  lag_drop@25%={lag_d25:.4f}"
         print(msg)
 
+    def _store_local(m, attr):
+        attr = np.abs(attr).mean(axis=1)
+        lag_auc, lag_d25 = 0, 0
+        for _, a in enumerate(attr):
+            lag_auc += _lag_auc(a)[0]
+            lag_d25 += _lag_d25(a)
+        lag_auc /= len(attr)
+        lag_d25 /= len(attr)
+        r.update(
+            {
+                f"{p}{m}_lag_auc": lag_auc,
+                f"{p}{m}_lag_drop25": lag_d25,
+            }
+        )
+        msg = f"    lag_AUC={lag_auc:.4f}  lag_drop@25%={lag_d25:.4f}"
+        print(msg)
 
     is_differentiable = arch not in NON_DIFFERENTIABLE_ARCHS
 
@@ -1742,20 +1751,20 @@ def _run_methods_for_model(
     if is_differentiable and not args.skip_ig:
         print("\n  [IG]")
         attr = run_ig(X_test_dt, model, device, tau=args.tau)
-        _store("ig", attr, attr_to_time_scores(attr))
+        _store_local("ig", attr)
 
     if not args.skip_timeshap:
         print("\n  [TimeShap] (nsamples={args.ts_nsamples})")
         attr = run_timeshap(
             X_test_dt, model, device, nsamples=args.ts_nsamples, tau=args.tau
         )
-        _store("timeshap", attr, attr_to_time_scores(attr))
+        _store_local("timeshap", attr)
 
     if is_differentiable and not args.skip_timing:
         print("\n  [TIMING]")
         try:
             attr = run_timing(X_test_dt, model, device, tau=args.tau)
-            _store("timing", attr, attr_to_time_scores(attr))
+            _store_local("timing", attr)
         except Exception as e:
             print(f"    TIMING failed: {e}")
 
@@ -1921,7 +1930,6 @@ def run_dataset(
             )
         except FileNotFoundError as e:
             print(f"  Skipping Random Forest: {e}")
-
 
     # Save per-dataset JSON
     out_file = out_dir / f"{name}_results.json"
