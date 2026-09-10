@@ -35,7 +35,6 @@ from experiments.comparison_realdata import (
     MAX_KARMA_D,
     NON_DIFFERENTIABLE_ARCHS,
     DatasetConfig,
-    attr_to_time_scores,
     attribution_complexity,
     fit_var_imputer,
     get_or_train_gru,
@@ -126,31 +125,32 @@ def _run_fold_for_model(
             karma_b_star=karma_b_star,
         )
 
-    def _store(
-        m: str,
-        attr: np.ndarray,
-        time_scores: np.ndarray,
-    ):
+    def _store_local(m, attr):
         comp = attribution_complexity(attr)
+        attr = np.abs(attr).mean(axis=1)
+        lag_auc, lag_d25 = 0, 0
         r[f"{p}{m}_complexity"] = comp
         msg = f"cplx={comp:.4f}"
-        if not args.complexity_only:
-            lag_auc, _ = _lag_auc(time_scores)
-            lag_d25 = _lag_d25(time_scores)
-            r.update(
-                {
-                    f"{p}{m}_lag_auc": lag_auc,
-                    f"{p}{m}_lag_drop25": lag_d25,
-                }
-            )
-            msg = f"lag_AUC={lag_auc:.4f}  lag_drop@25%={lag_d25:.4f}  " + msg
+        for _, a in enumerate(attr):
+            lag_auc += _lag_auc(a)[0]
+            lag_d25 += _lag_d25(a)
+        lag_auc /= len(attr)
+        lag_d25 /= len(attr)
+        r.update(
+            {
+                f"{p}{m}_lag_auc": lag_auc,
+                f"{p}{m}_lag_drop25": lag_d25,
+            }
+        )
+        msg = f"    lag_AUC={lag_auc:.4f}  lag_drop@25%={lag_d25:.4f}"
+        print(msg)
 
     is_differentiable = arch not in NON_DIFFERENTIABLE_ARCHS
 
     if is_differentiable and not args.skip_ig:
         print("\n  [IG]")
         attr = run_ig(x_fold, model, device, tau=args.tau)
-        _store("ig", attr, attr_to_time_scores(attr))
+        _store_local("ig", attr)
 
     if not args.skip_timeshap:
         print("\n  [TimeShap]")
@@ -158,7 +158,7 @@ def _run_fold_for_model(
             attr = run_timeshap(
                 x_fold, model, device, nsamples=args.ts_nsamples, tau=args.tau
             )
-            _store("timeshap", attr, attr_to_time_scores(attr))
+            _store_local("timeshap", attr)
         except Exception as e:
             print(f"    [TimeShap] skipped: {e}")
 
@@ -184,7 +184,7 @@ def _run_fold_for_model(
         print("\n  [TIMING]")
         try:
             attr = run_timing(x_fold, model, device, tau=args.tau)
-            _store("timing", attr, attr_to_time_scores(attr))
+            _store_local("timing", attr)
         except Exception as e:
             print(f"    [fold {fold}] TIMING failed: {e}")
 
@@ -194,7 +194,7 @@ def _run_fold_for_model(
             attr, _ = run_tsmule(
                 x_fold, model, device, n_samples=args.tsmule_nsamples, tau=args.tau
             )
-            _store("tsmule", attr, attr_to_time_scores(attr))
+            _store_local("tsmule", attr)
         except Exception as e:
             print(f"    [fold {fold}] TS-MuLe failed: {e}")
 
@@ -204,7 +204,7 @@ def _run_fold_for_model(
             attr, _ = run_shaptime(
                 x_fold, model, device, Tn=args.shaptime_tn, tau=args.tau
             )
-            _store("shaptime", attr, attr_to_time_scores(attr))
+            _store_local("shaptime", attr)
         except Exception as e:
             print(f"    [fold {fold}] ShapTime failed: {e}")
 
