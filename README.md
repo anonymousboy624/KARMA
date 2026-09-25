@@ -10,9 +10,69 @@ KARMA is a model-agnostic framework for retrospective causal attribution in mult
 
 All tables and figures in the paper come from compare_realdata_cv and compare_varmulti experiment scripts. The steps below reproduce them end-to-end.
 
-### 1 — Install dependencies
+## 1 — Install dependencies
 
-Just build devcontainer and all dependencies will be installed automatically.
+The recommended way to run KARMA is inside the provided **Dev Container**, which sets up Python, Poetry, and all project dependencies in a reproducible environment.
+
+### Option A (recommended) — Use the Dev Container in VS Code
+
+This is the easiest and most reliable setup, especially if you want to reproduce the paper results exactly.
+
+#### Prerequisites
+
+Install the following on your machine:
+
+- [Docker](https://www.docker.com/)
+- [Visual Studio Code](https://code.visualstudio.com/)
+- The [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) for VS Code
+
+You can verify Docker is installed correctly with:
+
+```bash
+docker --version
+Open the project in the container
+cd KARMA
+
+Open the project folder in VS Code:
+code .
+
+When VS Code detects the .devcontainer/ configuration, it should prompt:
+
+“Reopen in Container”
+Click that prompt.If you do not see the prompt:
+Press Ctrl+Shift+P (or Cmd+Shift+P on macOS)
+Search for:
+Dev Containers: Reopen in Container
+
+VS Code will now:
+
+build the Docker image defined by the devcontainer
+create a container for the project
+install system packages and Python dependencies
+attach your editor to that environment
+
+
+The first build may take several minutes.Confirm the environment is readyOnce the container finishes building, open a terminal in VS Code and check:python --version
+poetry --version
+If the project uses Poetry-managed dependencies, you can also verify them with:poetry install
+In most setups, the devcontainer will already run dependency installation automatically, but running this manually is a safe way to confirm everything is available.Rebuilding the containerIf dependencies change or the container becomes stale, rebuild it from VS Code:
+Open Command Palette
+Run:
+Dev Containers: Rebuild and Reopen in Container
+This is useful after:
+editing Dockerfile
+editing .devcontainer/devcontainer.json
+changing Python dependency files such as pyproject.toml or poetry.lock
+
+
+### Option B — Build the Dev Container manually with Docker
+
+If you prefer not to use VS Code, you can still build the development environment directly with Docker.
+1. Build the imageFrom the repository root, run:docker build -t karma-dev -f .devcontainer/Dockerfile. If your project uses a different Dockerfile path, replace .devcontainer/Dockerfile accordingly
+2. Start a containerdocker run --rm -it -v "$(pwd):/workspace" -w /workspace karma-dev bash. This mounts the repository into the container and opens an interactive shell.
+3. Install Python dependenciesInside the container, run:poetry install
+4. Verify the setup python --version & poetry --version
+
 
 ### 2 — Prepare data
 
