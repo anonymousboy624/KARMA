@@ -14,7 +14,7 @@ All tables and figures in the paper come from compare_realdata_cv and compare_va
 
 The recommended way to run KARMA is inside the provided **Dev Container**, which sets up Python, Poetry, and all project dependencies in a reproducible environment.
 
-### Option A (recommended) — Use the Dev Container in VS Code
+### Use the Dev Container in VS Code
 
 This is the easiest and most reliable setup, especially if you want to reproduce the paper results exactly.
 
@@ -30,6 +30,7 @@ You can verify Docker is installed correctly with:
 
 ```bash
 docker --version
+```
 Open the project in the container
 cd KARMA
 
@@ -52,10 +53,13 @@ install system packages and Python dependencies
 attach your editor to that environment
 
 
-The first build may take several minutes.Confirm the environment is readyOnce the container finishes building, open a terminal in VS Code and check:python --version
+The first build may take several minutes.Confirm the environment is ready. Once the container finishes building, open a terminal in VS Code and check: 
+```bash
+python --version
 poetry --version
-If the project uses Poetry-managed dependencies, you can also verify them with:poetry install
-In most setups, the devcontainer will already run dependency installation automatically, but running this manually is a safe way to confirm everything is available.Rebuilding the containerIf dependencies change or the container becomes stale, rebuild it from VS Code:
+``` 
+If the project uses Poetry-managed dependencies, you can also verify them with: ```poetry install```
+In most setups, the devcontainer will already run dependency installation automatically, but running this manually is a safe way to confirm everything is available. If dependencies change or the container becomes stale, rebuild it from VS Code:
 Open Command Palette
 Run:
 Dev Containers: Rebuild and Reopen in Container
@@ -64,14 +68,6 @@ editing Dockerfile
 editing .devcontainer/devcontainer.json
 changing Python dependency files such as pyproject.toml or poetry.lock
 
-
-### Option B — Build the Dev Container manually with Docker
-
-If you prefer not to use VS Code, you can still build the development environment directly with Docker.
-1. Build the imageFrom the repository root, run:docker build -t karma-dev -f .devcontainer/Dockerfile. If your project uses a different Dockerfile path, replace .devcontainer/Dockerfile accordingly
-2. Start a containerdocker run --rm -it -v "$(pwd):/workspace" -w /workspace karma-dev bash. This mounts the repository into the container and opens an interactive shell.
-3. Install Python dependenciesInside the container, run:poetry install
-4. Verify the setup python --version & poetry --version
 
 
 ### 2 — Prepare data
